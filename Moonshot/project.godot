@@ -57,6 +57,7 @@ attack={
 2d_physics/layer_2="Enemies"
 2d_physics/layer_3="Barriers"
 2d_physics/layer_4="Platforms"
+2d_physics/layer_5="Projectiles"
 
 [rendering]
 

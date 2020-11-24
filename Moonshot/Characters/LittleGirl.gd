@@ -2,18 +2,20 @@ extends KinematicBody2D
 
 
 var velocity = Vector2()
-var health = 3
+var health = 5
 var fuel = 0
 var cans = 3
 var state = STATES.NORMAL
-var stun_length
+var stun_length = 1
 var too_high = false
 var collide_object
+var collide_with_platform = false
 
 enum STATES{
 		NORMAL,
 		DAZED,
-		ATTACK
+		ATTACK,
+		Lose
 		}
 
 const JETPACK_POWER = -400
@@ -30,7 +32,6 @@ func _ready():
 
 
 func _physics_process(delta):
-
 # Gravity #########################################################
 	if velocity.y < GRAVITY_MAX and !is_on_floor():
 		velocity.y += GRAVITY * delta
@@ -46,6 +47,9 @@ func _physics_process(delta):
 		
 		STATES.ATTACK:
 			attack_state(delta)
+		
+		STATES.Lose:
+			lose_state()
 
 # Debug
 	velocity.x = stepify(velocity.x,1)
@@ -60,46 +64,52 @@ func recharge_fuel():
 
 # Enemy Interaction ###########################################
 func bounce():
-	velocity.y = -BOUNCE
+	if STATES.NORMAL:
+		velocity.y = -BOUNCE
 
 	# Damage ##################################################
-
-func sideHurt(var enemy_position_x):
-	stun_length = 0.5
-	if enemy_position_x > position.x:
-		velocity.x = -BOUNCE * 2
+func hurt(origin):
+	health = health - 1
+	if health <= 0:
+		state = STATES.Lose
 	else:
-		velocity.x = BOUNCE * 2
-	Input.action_release("moveLeft")
-	Input.action_release("moveRight")
-	set_dazed(stun_length)
-	state = STATES.DAZED
-
-
-func downHurt():
-	velocity.y = BOUNCE * 0.5
-	Input.action_release("moveUp")
-	set_dazed(stun_length)
-	state = STATES.DAZED
+		velocity = (self.global_position - origin).normalized() * -300
+		set_dazed(stun_length)
+		state = STATES.DAZED
 
 
 func fall_damage():
-	velocity.y = -BOUNCE * 0.6
+	health = health - 1
+	if health <= 0:
+		state = STATES.Lose
+	else:
+		velocity.y = -BOUNCE * 0.6
+		set_dazed(stun_length)
+		state = STATES.DAZED
+
+
+func shockwave_hurt(origin):
+	health = health - 1
+	if health <= 0:
+		state = STATES.Lose
+	else:
+		velocity = (self.global_position - origin).normalized() * 3000
+		set_dazed(5)
+		state = STATES.DAZED
 
 
 # Movement ####################################################
-func move_state(delta):
+func move_state(_delta):
 # Check for fall damage
 	if velocity.y >= GRAVITY_MAX:
 		too_high = true
+	else:
+		too_high = false
 
 
-	if too_high and is_on_floor():
+	if too_high and $RayCast2D.is_colliding():
 		stun_length = 3
 		fall_damage()
-		set_dazed(stun_length)
-		state = STATES.DAZED
-		too_high = false
 
 
 # Use Jet Pack
@@ -140,12 +150,18 @@ func set_dazed(set_length):
 	$Timer.start(set_length)
 
 
-func dazed_state(delta):
+func dazed_state(_delta):
 	$AnimationPlayer.play("Dazed_Anim")
-	velocity.x = lerp(velocity.x,0,0.3)
+	if is_on_floor():
+		velocity.x = lerp(velocity.x,0,0.3)
+	else:
+		velocity.x = lerp(velocity.x,0,0.01)
 	velocity = move_and_slide(velocity,Vector2.UP)
 
 
 func _on_Timer_timeout():
 	state = STATES.NORMAL
 
+
+func lose_state():
+	get_tree().change_scene("res://Scenes/Level1.tscn")

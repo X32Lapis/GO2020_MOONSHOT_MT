@@ -1,19 +1,16 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://Bird.gd" type="Script" id=1]
+[ext_resource path="res://Characters/Bird.gd" type="Script" id=1]
 [ext_resource path="res://icon.png" type="Texture" id=2]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 62.2033, 29.9633 )
 
 [sub_resource type="RectangleShape2D" id=2]
-extents = Vector2( 82.1597, 27.8249 )
+extents = Vector2( 82.1597, 36.3775 )
 
 [sub_resource type="RectangleShape2D" id=3]
-extents = Vector2( 57.9272, 10 )
-
-[sub_resource type="RectangleShape2D" id=4]
-extents = Vector2( 55.0763, 8.58145 )
+extents = Vector2( 57.9272, 9.29422 )
 
 [node name="Bird" type="KinematicBody2D"]
 collision_layer = 2
@@ -36,26 +33,18 @@ texture = ExtResource( 2 )
 position = Vector2( 0, -14.2544 )
 shape = SubResource( 1 )
 
-[node name="SideDetection" type="Area2D" parent="."]
+[node name="HurtBox" type="Area2D" parent="."]
 collision_layer = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="SideDetection"]
-position = Vector2( -0.712723, -12.1162 )
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
+position = Vector2( -0.712723, -5.70173 )
 shape = SubResource( 2 )
 
 [node name="TopDetection" type="Area2D" parent="."]
 collision_layer = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TopDetection"]
-position = Vector2( 0, -57.7303 )
+position = Vector2( 0, -55.5921 )
 shape = SubResource( 3 )
-
-[node name="BottomDetection" type="Area2D" parent="."]
-collision_layer = 2
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="BottomDetection"]
-position = Vector2( 0, 29.2215 )
-shape = SubResource( 4 )
-[connection signal="body_entered" from="SideDetection" to="." method="_on_SideDetection_body_entered"]
+[connection signal="body_entered" from="HurtBox" to="." method="_on_HurtBox_body_entered"]
 [connection signal="body_entered" from="TopDetection" to="." method="_on_TopDetection_body_entered"]
-[connection signal="body_entered" from="BottomDetection" to="." method="_on_BottomDetection_body_entered"]
