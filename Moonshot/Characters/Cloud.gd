@@ -1,11 +1,11 @@
 extends StaticBody2D
 
-
 export var direction = 1
-export var speed = 10
+export var speed = 0.2
 var current_speed = speed
 export var is_grumpy = false
 export var aggression_multiplier = 1
+
 
 var state = NORMAL
 var aggression_level = 0
@@ -23,6 +23,8 @@ enum {
 
 const AGGRESSION_RATE = 5
 const AGGRESSION_MAX = 95
+const DAZE_LENGTH = 5
+const KNOCKBACK_STRENGTH = 3000
 
 
 func _ready():
@@ -31,12 +33,11 @@ func _ready():
 func _physics_process(delta):
 	$AggressionLevel.text = String(stepify(aggression_level,1))
 	if direction == 1:
-		parent_node.global_position.x += current_speed * delta
+		parent_node.global_position.x += current_speed
 	else:
-		parent_node.global_position.x -= current_speed * delta
+		parent_node.global_position.x -= current_speed
 
 	$Extra.text = "Angry: " + String(is_angry) + " Shckwve RNG: " + String(is_shockwave_range)
-
 
 	match state:
 		NORMAL:
@@ -119,5 +120,4 @@ func _on_Timer_timeout():
 
 
 func _on_ShockwaveArea_body_entered(body):
-	body.shockwave_hurt($ShockwaveArea/CollisionShape2D2.global_position)
-
+	body.hurt($ShockwaveArea/CollisionShape2D2.global_position,DAZE_LENGTH,KNOCKBACK_STRENGTH)

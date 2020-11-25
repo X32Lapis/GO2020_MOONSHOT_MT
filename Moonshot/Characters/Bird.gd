@@ -4,6 +4,9 @@ var velocity = Vector2()
 export var speed = 100
 export var direction = 1
 
+const DAZE_LENGTH = 1
+const KNOCKBACK_STRENGTH = 700
+
 
 func _physics_process(_delta):
 	if direction == 1:
@@ -20,4 +23,7 @@ func _on_TopDetection_body_entered(body):
 
 
 func _on_HurtBox_body_entered(body):
-	body.hurt(get_parent().global_position)
+	body.hurt(get_parent().global_position,DAZE_LENGTH,KNOCKBACK_STRENGTH)
+
+
+

@@ -11,5 +11,5 @@ func _physics_process(_delta):
 
 
 func _on_body_entered(body):
-	if body.name != "LittleGirl":
-		body.direction = body.direction * -1
+	body.direction = body.direction * -1
+

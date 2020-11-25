@@ -6,9 +6,12 @@ var state = IDLE
 onready var player = get_parent().get_parent().get_node("LittleGirl")
 var speed = 0
 
-enum {IDLE,SEEKING,DRAINING}
+enum {	IDLE,
+		SEEKING,
+		DRAINING
+		}
 
-const MAX_SPEED = 400
+const MAX_SPEED = 200
 const DRAIN_FUEL = 20
 
 

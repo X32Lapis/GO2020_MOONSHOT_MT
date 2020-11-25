@@ -64,17 +64,22 @@ func recharge_fuel():
 
 # Enemy Interaction ###########################################
 func bounce():
-	if STATES.NORMAL:
-		velocity.y = -BOUNCE
+#	if STATES.NORMAL:
+	velocity.y = -BOUNCE
+
 
 	# Damage ##################################################
-func hurt(origin):
+func hurt(origin,daze,power):
 	health = health - 1
 	if health <= 0:
 		state = STATES.Lose
 	else:
-		velocity = (self.global_position - origin).normalized() * -300
-		set_dazed(stun_length)
+		if velocity.x > origin.x:
+			velocity = (self.global_position - origin).normalized() * -power
+		else:
+			velocity = (self.global_position - origin).normalized() * power
+
+		set_dazed(daze)
 		state = STATES.DAZED
 
 
@@ -85,16 +90,6 @@ func fall_damage():
 	else:
 		velocity.y = -BOUNCE * 0.6
 		set_dazed(stun_length)
-		state = STATES.DAZED
-
-
-func shockwave_hurt(origin):
-	health = health - 1
-	if health <= 0:
-		state = STATES.Lose
-	else:
-		velocity = (self.global_position - origin).normalized() * 3000
-		set_dazed(5)
 		state = STATES.DAZED
 
 

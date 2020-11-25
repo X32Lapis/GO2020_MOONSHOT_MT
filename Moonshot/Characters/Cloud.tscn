@@ -58,9 +58,11 @@ radius = 600.0
 radius = 800.0
 
 [node name="Cloud" type="StaticBody2D"]
+position = Vector2( 0, -2.26276 )
 collision_layer = 8
 collision_mask = 5
 script = ExtResource( 2 )
+speed = 0.0
 
 [node name="Sprite" type="Sprite" parent="."]
 scale = Vector2( 10.7864, 4.22441 )
@@ -128,6 +130,14 @@ collision_layer = 16
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="ShockwaveArea"]
 shape = SubResource( 5 )
 disabled = true
+
+[node name="DirectionChange" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 4
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="DirectionChange"]
+shape = SubResource( 1 )
+one_way_collision = true
 [connection signal="body_entered" from="GrumpyZone" to="." method="_on_GrumpyZone_body_entered"]
 [connection signal="body_exited" from="GrumpyZone" to="." method="_on_GrumpyZone_body_exited"]
 [connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
