@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 [gd_scene load_steps=12 format=2]
+=======
+[gd_scene load_steps=11 format=2]
+>>>>>>> 2b6c6870be0913ed2bc090dbfccf1a5e08568fd5
 
 [ext_resource path="res://Characters/Insects.gd" type="Script" id=1]
 [ext_resource path="res://Art/Insects_01.png" type="Texture" id=2]
