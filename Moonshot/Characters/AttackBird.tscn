@@ -41,23 +41,10 @@ animations = [ {
 } ]
 
 [sub_resource type="RectangleShape2D" id=8]
-<<<<<<< HEAD
 extents = Vector2( 28.2853, 20.6032 )
 
 [sub_resource type="CapsuleShape2D" id=9]
 radius = 428.091
-=======
-extents = Vector2( 94.9559, 42.1108 )
-
-[sub_resource type="RectangleShape2D" id=9]
-extents = Vector2( 124.372, 53.8799 )
-
-[sub_resource type="RectangleShape2D" id=10]
-extents = Vector2( 107.967, 13.4463 )
-
-[sub_resource type="CapsuleShape2D" id=11]
-radius = 304.958
->>>>>>> 2b6c6870be0913ed2bc090dbfccf1a5e08568fd5
 height = 484.145
 
 [sub_resource type="RectangleShape2D" id=10]
@@ -67,28 +54,19 @@ extents = Vector2( 111.526, 46.8983 )
 extents = Vector2( 97.9847, 12.154 )
 
 [node name="AttackBird" type="KinematicBody2D"]
-<<<<<<< HEAD
 scale = Vector2( 1.5, 1.5 )
-=======
-scale = Vector2( 2, 2 )
->>>>>>> 2b6c6870be0913ed2bc090dbfccf1a5e08568fd5
 collision_layer = 2
 script = ExtResource( 2 )
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 frames = SubResource( 7 )
 animation = "idle"
-<<<<<<< HEAD
 frame = 3
-=======
-frame = 4
->>>>>>> 2b6c6870be0913ed2bc090dbfccf1a5e08568fd5
 playing = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( 0.565704, 10.748 )
 shape = SubResource( 8 )
-<<<<<<< HEAD
 
 [node name="SeekRange" type="Area2D" parent="."]
 collision_layer = 2
@@ -97,40 +75,20 @@ collision_layer = 2
 position = Vector2( 0, 219.226 )
 rotation = 1.5708
 shape = SubResource( 9 )
-=======
->>>>>>> 2b6c6870be0913ed2bc090dbfccf1a5e08568fd5
 
 [node name="HurtBox" type="Area2D" parent="."]
 collision_layer = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
-<<<<<<< HEAD
 position = Vector2( 0, 13.0483 )
 shape = SubResource( 10 )
-=======
-position = Vector2( 0, 24.2142 )
-shape = SubResource( 9 )
->>>>>>> 2b6c6870be0913ed2bc090dbfccf1a5e08568fd5
 
 [node name="TopDetection" type="Area2D" parent="."]
 collision_layer = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TopDetection"]
-<<<<<<< HEAD
 position = Vector2( 0, -51.6303 )
 shape = SubResource( 11 )
 [connection signal="body_entered" from="SeekRange" to="." method="_on_SeekRange_body_entered"]
-=======
-position = Vector2( 0, -46.8788 )
-shape = SubResource( 10 )
-
-[node name="SeekRange" type="Area2D" parent="."]
-collision_layer = 2
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="SeekRange"]
-position = Vector2( 0, 334.686 )
-rotation = 1.5708
-shape = SubResource( 11 )
->>>>>>> 2b6c6870be0913ed2bc090dbfccf1a5e08568fd5
 [connection signal="body_entered" from="HurtBox" to="." method="_on_HurtBox_body_entered"]
 [connection signal="body_entered" from="TopDetection" to="." method="_on_TopDetection_body_entered"]

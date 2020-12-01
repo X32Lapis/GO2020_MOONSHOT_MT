@@ -17,7 +17,7 @@ enum STATES{
 		}
 
 const JETPACK_POWER = -400
-const FUEL_MAX = 10000
+const FUEL_MAX = 5000
 const FUEL_DRAIN = 10
 const GRAVITY = 3000
 const GRAVITY_MAX = 2000
