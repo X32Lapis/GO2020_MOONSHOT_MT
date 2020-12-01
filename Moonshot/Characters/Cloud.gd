@@ -6,14 +6,15 @@ var current_speed = speed
 export var is_grumpy = false
 export var aggression_multiplier = 1
 
-
+var current_colour = Color()
+var grumpy_colour = Color(0.45,0.45,0.45)
+var normal_colour = Color(1,1,1)
 var state = NORMAL
 var aggression_level = 0
 var is_angry = false
 var is_shockwave_range = false
 var is_able_shockwave = true
 
-onready var parent_node = get_parent()
 
 enum {
 		NORMAL,
@@ -23,19 +24,19 @@ enum {
 
 const AGGRESSION_RATE = 5
 const AGGRESSION_MAX = 95
-const DAZE_LENGTH = 5
-const KNOCKBACK_STRENGTH = 3000
+export var daze_length = 5
+export var knockback_strength = 3000
 
 
 func _ready():
 	$GrumpyZone/CollisionShape2D.disabled = !is_grumpy
+	if direction == 1:
+		$Facial.flip_h = false
+	elif direction == -1:
+		$Facial.flip_h = true
 
 func _physics_process(delta):
 	$AggressionLevel.text = String(stepify(aggression_level,1))
-	if direction == 1:
-		parent_node.global_position.x += current_speed
-	else:
-		parent_node.global_position.x -= current_speed
 
 	$Extra.text = "Angry: " + String(is_angry) + " Shckwve RNG: " + String(is_shockwave_range)
 
@@ -53,6 +54,14 @@ func _physics_process(delta):
 func normal_state(delta):
 	$StateLabel.text = "Normal"
 	
+	# start to fade colour to a more storm like colour
+	current_colour = $AnimatedSprite.get_modulate()
+	$AnimatedSprite.set_modulate(lerp(current_colour,normal_colour,0.1 * delta * aggression_multiplier))
+	
+	# facial expressions
+	if aggression_level < 30 && !is_grumpy:
+		$Facial.set_animation("calming")
+	
 	current_speed = move_toward(current_speed,speed,0.5)
 	
 	if is_angry and is_shockwave_range:
@@ -67,7 +76,10 @@ func normal_state(delta):
 
 func grumpy_state(delta):
 	$StateLabel.text = "Grumpy"
-		
+	current_colour = $AnimatedSprite.get_modulate()
+	$AnimatedSprite.set_modulate(lerp(current_colour,grumpy_colour,0.1 * delta * aggression_multiplier))
+	
+	
 	if is_angry and is_shockwave_range:
 		current_speed = move_toward(current_speed,0,0.5)
 		intial_shockwave()
@@ -81,6 +93,9 @@ func grumpy_state(delta):
 
 func storm_state():
 	$StateLabel.text = "Storm"
+	current_colour = $AnimatedSprite.get_modulate()
+	$AnimatedSprite.set_modulate(lerp(current_colour,grumpy_colour,0.2))
+	
 	if is_angry and is_shockwave_range:
 		current_speed = move_toward(current_speed,0,0.5)
 		intial_shockwave()
@@ -120,4 +135,4 @@ func _on_Timer_timeout():
 
 
 func _on_ShockwaveArea_body_entered(body):
-	body.hurt($ShockwaveArea/CollisionShape2D2.global_position,DAZE_LENGTH,KNOCKBACK_STRENGTH)
+	body.hurt($ShockwaveArea.global_position,daze_length,knockback_strength)

@@ -3,17 +3,20 @@ extends KinematicBody2D
 
 var velocity = Vector2()
 var state = IDLE
-onready var player = get_parent().get_parent().get_node("LittleGirl")
+onready var player = get_parent().get_parent().get_parent().get_node("LittleGirl")
 var speed = 0
+export var max_speed = 200
+export var color = Color(1,1,1)
 
 enum {	IDLE,
 		SEEKING,
 		DRAINING
 		}
 
-const MAX_SPEED = 200
-const DRAIN_FUEL = 20
+const DRAIN_FUEL = 25
 
+func _ready():
+	set_modulate(color)
 
 func _physics_process(_delta):
 	match state:
@@ -35,8 +38,8 @@ func idle_state():
 
 
 func seeking_state():
-	if speed < MAX_SPEED:
-		speed = move_toward(speed,MAX_SPEED,1.2)
+	if speed < max_speed:
+		speed = move_toward(speed,max_speed,1.2)
 	var distance = Vector2(player.global_position - global_position)
 	velocity = move_and_slide(speed * distance.normalized())
 
@@ -61,3 +64,7 @@ func _on_HurtProx_body_entered(_body):
 
 func _on_HurtProx_body_exited(_body):
 	state = SEEKING
+
+
+func _on_EatenRadius_body_entered(body):
+		queue_free()

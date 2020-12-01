@@ -1,6 +1,8 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://Characters/Insects.gd" type="Script" id=1]
+[ext_resource path="res://Art/Insects_01.png" type="Texture" id=2]
+[ext_resource path="res://Art/Insects_02.png" type="Texture" id=3]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 24.9135
@@ -18,10 +20,15 @@ orbit_velocity = 0.5
 orbit_velocity_random = 0.1
 tangential_accel = 10.0
 tangential_accel_random = 1.0
-scale = 3.0
-color = Color( 0.101961, 0.101961, 0.101961, 1 )
 
-[sub_resource type="ParticlesMaterial" id=4]
+[sub_resource type="AnimatedTexture" id=4]
+frames = 2
+fps = 8.0
+frame_0/texture = ExtResource( 2 )
+frame_1/texture = ExtResource( 3 )
+frame_1/delay_sec = 0.0
+
+[sub_resource type="ParticlesMaterial" id=5]
 emission_shape = 1
 emission_sphere_radius = 20.0
 flag_disable_z = true
@@ -33,14 +40,23 @@ orbit_velocity_random = 0.0
 linear_accel = 0.2
 tangential_accel = 10.0
 tangential_accel_random = 0.2
-scale = 5.0
-color = Color( 0, 0, 0, 1 )
 
-[sub_resource type="CapsuleShape2D" id=5]
+[sub_resource type="AnimatedTexture" id=6]
+frames = 2
+fps = 8.0
+frame_0/texture = ExtResource( 2 )
+frame_1/texture = ExtResource( 3 )
+frame_1/delay_sec = 0.0
+
+[sub_resource type="CapsuleShape2D" id=7]
 radius = 20.5702
+
+[sub_resource type="CircleShape2D" id=8]
+radius = 32.6754
 
 [node name="Insects" type="KinematicBody2D"]
 collision_layer = 2
+collision_mask = 33
 script = ExtResource( 1 )
 
 [node name="HurtProx" type="Area2D" parent="."]
@@ -56,22 +72,32 @@ collision_layer = 2
 shape = SubResource( 2 )
 
 [node name="InsectsSparse" type="Particles2D" parent="."]
-amount = 20
+amount = 10
 lifetime = 20.0
 preprocess = 20.0
 speed_scale = 2.0
 process_material = SubResource( 3 )
+texture = SubResource( 4 )
 
 [node name="InsectsDense" type="Particles2D" parent="."]
 lifetime = 5.0
 preprocess = 30.0
 speed_scale = 3.0
-process_material = SubResource( 4 )
+process_material = SubResource( 5 )
+texture = SubResource( 6 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource( 5 )
+shape = SubResource( 7 )
 disabled = true
+
+[node name="EatenRadius" type="Area2D" parent="."]
+collision_layer = 64
+collision_mask = 32
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EatenRadius"]
+shape = SubResource( 8 )
 [connection signal="body_entered" from="HurtProx" to="." method="_on_HurtProx_body_entered"]
 [connection signal="body_exited" from="HurtProx" to="." method="_on_HurtProx_body_exited"]
 [connection signal="body_entered" from="SeekProxy" to="." method="_on_SeekProxy_body_entered"]
 [connection signal="body_exited" from="SeekProxy" to="." method="_on_SeekProxy_body_exited"]
+[connection signal="body_entered" from="EatenRadius" to="." method="_on_EatenRadius_body_entered"]
